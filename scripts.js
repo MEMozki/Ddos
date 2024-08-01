@@ -22,6 +22,7 @@ function startPing(url) {
     document.getElementById('pingTime').innerText = '0 ms';
     document.getElementById('startPing').disabled = true;
     document.getElementById('stopPing').disabled = false;
+    updateProgress(0);
 
     pingInterval = setInterval(async () => {
         const start = Date.now();
@@ -33,11 +34,17 @@ function startPing(url) {
             const end = Date.now();
             updatePing(end - start, false);
         }
-    }, 1000);
+    }, 1); // Интервал в 1 миллисекунду
 }
 
 function updatePing(pingTime, success = true) {
     requestCount++;
     document.getElementById('requestCount').innerText = requestCount.toString();
     document.getElementById('pingTime').innerText = success ? `${pingTime} ms` : 'Request failed';
+    updateProgress((requestCount % 100) / 100 * 100);
+}
+
+function updateProgress(percent) {
+    const progressBar = document.querySelector('.progress');
+    progressBar.style.width = `${percent}%`;
 }
