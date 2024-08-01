@@ -19,23 +19,28 @@ document.getElementById('stopPing').addEventListener('click', () => {
 function startPing(url) {
     requestCount = 0;
     document.getElementById('requestCount').innerText = '0';
+    document.getElementById('pingTime').innerText = '0 ms';
     document.getElementById('startPing').disabled = true;
     document.getElementById('stopPing').disabled = false;
     updateProgress(0);
 
     pingInterval = setInterval(async () => {
+        const start = Date.now();
         try {
             await fetch(url, { mode: 'no-cors' });
+            const end = Date.now();
+            updatePing(end - start);
         } catch (error) {
-            // Ignore errors
+            const end = Date.now();
+            updatePing(end - start, false);
         }
-        updateRequestCount();
-    }, 10); // Интервал в 10 миллисекунд
+    }, 10); // Интервал в 1 миллисекунду
 }
 
-function updateRequestCount() {
+function updatePing(pingTime, success = true) {
     requestCount++;
     document.getElementById('requestCount').innerText = requestCount.toString();
+    document.getElementById('pingTime').innerText = success ? `${pingTime} ms` : 'Request failed';
     updateProgress((requestCount % 100) / 100 * 100);
 }
 
