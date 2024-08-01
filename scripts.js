@@ -4,7 +4,7 @@ let pingInterval;
 document.getElementById('startPing').addEventListener('click', () => {
     const url = document.getElementById('urlInput').value;
     if (!url) {
-        alert('Please enter a URL');
+        alert('Please enter a DOMEN');
         return;
     }
     startPing(url);
@@ -34,7 +34,7 @@ function startPing(url) {
             const end = Date.now();
             updatePing(end - start, false);
         }
-    }, 1); // Интервал в 1 миллисекунду
+    }, 55); // Интервал в 1 миллисекунду
 }
 
 function updatePing(pingTime, success = true) {
