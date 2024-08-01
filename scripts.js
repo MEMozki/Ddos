@@ -34,7 +34,7 @@ function startPing(url) {
             const end = Date.now();
             updatePing(end - start, false);
         }
-    }, 10); // Интервал в 1 миллисекунду
+    }, 1); // Интервал в 1 миллисекунду
 }
 
 function updatePing(pingTime, success = true) {
