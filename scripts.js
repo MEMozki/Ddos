@@ -37,7 +37,7 @@ function startPing(url) {
         } catch (error) {
             updateRequestCount();
         }
-    }, 25); // Интервал в 25 миллисекунду
+    }, 75); // Интервал в 75 миллисекунду
 }
 
 function updateRequestCount() {
