@@ -40,7 +40,7 @@ function startPing(url) {
             const end = Date.now();
             updatePing(end - start, false);
         }
-    }, 25); // Интервал в 100 миллисекунд
+    }, 45); // Интервал в 100 миллисекунд
 }
 
 function updatePing(pingTime, success = true) {
