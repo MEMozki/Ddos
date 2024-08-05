@@ -1,12 +1,13 @@
-const whiteList = ['pinterest.com', '65.108.3.108']; // Список запрещенных сайтов
+const whiteList = ['pinterest.com', 'example.com']; // Список запрещенных сайтов
 
 let requestCount = 0;
 let pingInterval;
 
 document.getElementById('startPing').addEventListener('click', () => {
-    const url = document.getElementById('urlInput').value.trim();
+    const urlInput = document.getElementById('urlInput').value.trim();
+    const url = addProtocol(urlInput); // Добавляем протокол, если его нет
     if (!url) {
-        alert('Please enter a URL');
+        alert('Please enter a valid URL');
         return;
     }
     if (isWhiteListed(url)) {
@@ -40,7 +41,7 @@ function startPing(url) {
             const end = Date.now();
             updatePing(end - start, false);
         }
-    }, 45); // Интервал в 100 миллисекунд
+    }, 100); // Интервал в 100 миллисекунд
 }
 
 function updatePing(pingTime, success = true) {
@@ -62,4 +63,11 @@ function isWhiteListed(url) {
     } catch (error) {
         return false; // Если URL не валидный, то он не в белом списке
     }
+}
+
+function addProtocol(url) {
+    if (!/^https?:\/\//i.test(url)) {
+        return `http://${url}`;
+    }
+    return url;
 }
