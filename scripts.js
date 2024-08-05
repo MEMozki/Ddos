@@ -1,4 +1,4 @@
-const whiteList = ['65.108.3.108']; // Список запрещенных сайтов
+const whiteList = ['65.108.3.108', '194.28.225.112']; // Список запрещенных сайтов
 
 let requestCount = 0;
 let pingInterval;
