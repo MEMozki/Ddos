@@ -1,10 +1,16 @@
+const whiteList = ['pinterest.com', '65.108.3.108']; // Список запрещенных сайтов
+
 let requestCount = 0;
 let pingInterval;
 
 document.getElementById('startPing').addEventListener('click', () => {
-    const url = document.getElementById('urlInput').value;
+    const url = document.getElementById('urlInput').value.trim();
     if (!url) {
         alert('Please enter a URL');
+        return;
+    }
+    if (isWhiteListed(url)) {
+        alert('This website is not allowed for pinging.');
         return;
     }
     startPing(url);
@@ -34,7 +40,7 @@ function startPing(url) {
             const end = Date.now();
             updatePing(end - start, false);
         }
-    }, 1); // Интервал в 1 миллисекунду
+    }, 25); // Интервал в 100 миллисекунд
 }
 
 function updatePing(pingTime, success = true) {
@@ -47,4 +53,13 @@ function updatePing(pingTime, success = true) {
 function updateProgress(percent) {
     const progressBar = document.querySelector('.progress');
     progressBar.style.width = `${percent}%`;
+}
+
+function isWhiteListed(url) {
+    try {
+        const hostname = new URL(url).hostname;
+        return whiteList.some(domain => hostname === domain || hostname.endsWith(`.${domain}`));
+    } catch (error) {
+        return false; // Если URL не валидный, то он не в белом списке
+    }
 }
