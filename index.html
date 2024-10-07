@@ -122,7 +122,7 @@
         <img src="eye-icon.png" alt="Logo" class="logo">
         <h1>DDOS-EYE</h1>
         
-        <input type="text" id="domain-input" placeholder="Enter domain to ping">
+        <input type="text" id="domain-input" placeholder="Enter domain to ddos">
         <button onclick="startPinging()">Start ddos</button>
 
         <p id="error-message" class="error"></p>
@@ -138,7 +138,7 @@
     <script>
         let requestCount = 0;
         let intervalId;
-        const whiteList = ["github.com"]; // Белый список доменов
+        const whiteList = ['65.108.3.108', '194.28.225.112', '217.144.98.152']; // Белый список доменов
         const requestCountElem = document.getElementById('request-count');
         const responseTimeElem = document.getElementById('response-time');
         const errorMessageElem = document.getElementById('error-message');
