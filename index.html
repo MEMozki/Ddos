@@ -107,7 +107,7 @@
     <script>
         let requestCount = 0;
         let intervalId;
-        const whiteList = ["google.com", "apple.com", "facebook.com"]; // Белый список доменов
+        const whiteList = ["t.me"]; // Белый список доменов
         const requestCountElem = document.getElementById('request-count');
         const responseTimeElem = document.getElementById('response-time');
         const errorMessageElem = document.getElementById('error-message');
@@ -142,7 +142,7 @@
                 clearInterval(intervalId); // Останавливаем предыдущие запросы
             }
 
-            // Пинг каждые 100 миллисекунд
+            // Пинг каждые 1 миллисекунд
             intervalId = setInterval(() => pingDomain(domainInput), 1);
         }
     </script>
