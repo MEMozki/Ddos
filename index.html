@@ -3,90 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOS PenTest Simulation</title>
+    <title>Ping Website</title>
     <style>
+        /* iOS стиль с чёрно-белыми элементами */
         body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #333;
         }
+
         .container {
-            margin: 0 auto;
-            padding: 20px;
-            max-width: 800px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
             text-align: center;
+            width: 90%;
+            max-width: 400px;
         }
+
+        .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
         h1 {
-            color: #f05454;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #1c1c1e;
         }
-        .results {
-            margin-top: 20px;
-            background-color: #1e1e1e;
-            padding: 20px;
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #2c2c2e;
+        }
+
+        span {
+            font-weight: bold;
+            color: #007aff;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #d1d1d6;
             border-radius: 10px;
+            width: calc(100% - 22px);
+            font-size: 1em;
+            margin-bottom: 20px;
+            outline: none;
+            box-sizing: border-box;
         }
-        .actions button {
-            background-color: #f05454;
-            color: #ffffff;
-            border: none;
+
+        button {
+            background-color: #007aff;
+            color: white;
             padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
             cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-        .actions button:hover {
-            background-color: #d94343;
-        }
-        #progress {
-            margin-top: 10px;
             width: 100%;
-            height: 20px;
-            background-color: #333;
-            border-radius: 5px;
-            overflow: hidden;
         }
-        #progress-bar {
-            width: 0;
-            height: 100%;
-            background-color: #f05454;
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        /* Иконки в стиле черно-белых эмодзи */
+        .icon {
+            font-size: 1.5em;
+            color: #1c1c1e;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>DOS PenTest Simulation</h1>
-        <div class="actions">
-            <button onclick="startTest()">Start DOS Test Simulation</button>
-        </div>
-        <div id="progress" class="progress-bar-container">
-            <div id="progress-bar"></div>
-        </div>
-        <div class="results">
-            <h2>Test Results</h2>
-            <div id="results-output">No tests have been run yet.</div>
-        </div>
+        <img src="eye-icon.png" alt="Logo" class="logo">
+        <h1><span class="icon">🌐</span> Ping Domain</h1>
+        
+        <input type="text" id="domain-input" placeholder="🔍 Enter domain to ping">
+        <button onclick="startPinging()">🚀 Start Pinging</button>
+
+        <p id="error-message" class="error"></p>
+        <p><span class="icon">🖥️</span> Total Requests Sent: <span id="request-count">0</span></p>
+        <p><span class="icon">⏱️</span> Last Response Time: <span id="response-time">0 ms</span></p>
     </div>
 
     <script>
-        function startTest() {
-            // Начинаем симуляцию DOS атаки
-            let progressBar = document.getElementById("progress-bar");
-            let output = document.getElementById("results-output");
-            output.innerHTML = "Simulating DOS attack...";
-            progressBar.style.width = '0%';
+        let requestCount = 0;
+        let intervalId;
+        const whiteList = ["google.com", "apple.com", "facebook.com"]; // Белый список доменов
+        const requestCountElem = document.getElementById('request-count');
+        const responseTimeElem = document.getElementById('response-time');
+        const errorMessageElem = document.getElementById('error-message');
 
-            let progress = 0;
-            let duration = 5000; // Длительность симуляции в миллисекундах (5 секунд)
+        function pingDomain(domain) {
+            const startTime = Date.now();
+            fetch(`https://${domain}`)
+                .then(response => {
+                    const endTime = Date.now();
+                    const responseTime = endTime - startTime;
+                    requestCount++;
+                    requestCountElem.textContent = requestCount;
+                    responseTimeElem.textContent = `${responseTime} ms`;
+                })
+                .catch(error => {
+                    console.error('Error pinging domain:', error);
+                });
+        }
 
-            let interval = setInterval(() => {
-                progress += 5;  // Увеличиваем прогресс каждые 100 мс
-                progressBar.style.width = progress + '%';
+        function startPinging() {
+            const domainInput = document.getElementById('domain-input').value.trim();
 
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    output.innerHTML = "DOS attack simulation complete! Target is unresponsive.";
-                }
-            }, duration / 100);
+            // Проверка на белый список
+            if (whiteList.includes(domainInput)) {
+                errorMessageElem.textContent = `❌ Cannot ping ${domainInput} - domain is in the white list!`;
+                return;
+            }
+
+            errorMessageElem.textContent = ''; // Очистка сообщения об ошибке
+
+            if (intervalId) {
+                clearInterval(intervalId); // Останавливаем предыдущие запросы
+            }
+
+            // Пинг каждые 100 миллисекунд
+            intervalId = setInterval(() => pingDomain(domainInput), 1);
         }
     </script>
 </body>
