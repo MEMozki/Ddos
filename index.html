@@ -3,26 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website DDOS</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>DOS PenTest Simulation</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+            text-align: center;
+        }
+        h1 {
+            color: #f05454;
+        }
+        .results {
+            margin-top: 20px;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .actions button {
+            background-color: #f05454;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .actions button:hover {
+            background-color: #d94343;
+        }
+        #progress {
+            margin-top: 10px;
+            width: 100%;
+            height: 20px;
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            width: 0;
+            height: 100%;
+            background-color: #f05454;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="eye-icon"></div>
+        <h1>DOS PenTest Simulation</h1>
+        <div class="actions">
+            <button onclick="startTest()">Start DOS Test Simulation</button>
         </div>
-        <input type="text" id="urlInput" placeholder="Enter website URL" />
-        <div class="button-container">
-            <button id="startPing">START DDOS</button>
-            <button id="stopPing" disabled>STOP DDOS</button>
+        <div id="progress" class="progress-bar-container">
+            <div id="progress-bar"></div>
         </div>
-        <div id="pingContainer">
-            <p>Request: <span id="requestCount">0</span></p>
-            <div class="progress-bar">
-                <div class="progress"></div>
-            </div>
+        <div class="results">
+            <h2>Test Results</h2>
+            <div id="results-output">No tests have been run yet.</div>
         </div>
     </div>
-    <script src="scripts.js"></script>
+
+    <script>
+        function startTest() {
+            // Начинаем симуляцию DOS атаки
+            let progressBar = document.getElementById("progress-bar");
+            let output = document.getElementById("results-output");
+            output.innerHTML = "Simulating DOS attack...";
+            progressBar.style.width = '0%';
+
+            let progress = 0;
+            let duration = 5000; // Длительность симуляции в миллисекундах (5 секунд)
+
+            let interval = setInterval(() => {
+                progress += 5;  // Увеличиваем прогресс каждые 100 мс
+                progressBar.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    output.innerHTML = "DOS attack simulation complete! Target is unresponsive.";
+                }
+            }, duration / 100);
+        }
+    </script>
 </body>
 </html>
